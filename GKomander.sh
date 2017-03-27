@@ -12,13 +12,15 @@ GK_PROJ_DIR="$GK_HOME" # dir where the list of projects are stored
 
 # Make sure GK_HOME directory exists
 if [[ ! -d $GK_HOME ]]; then
-    mkdir $GK_HOME 
+    mkdir $GK_HOME
+    mkdir -p $GK_HOME/templates
+
 fi
 if [[ ! -d $GK_PROJ_DIR ]]; then
     mkdir $GK_PROJ_DIR 
 fi
 
-function return_error() {
+function gk_return_error() {
     # Print error message and return error code
     if [ "$2" ]; then
         echo "$2"
@@ -33,7 +35,7 @@ function return_error() {
 # Test if gk is sourced. It must not be ran in a subshell 
 if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
     SOURCE="GKomander MUST be sourced - not run in a subshell.\ni.e. '. ./gk'\n"
-    return_error 1 "$(printf "$SOURCE")"
+    gk_return_error 1 "$(printf "$SOURCE")"
     exit
 fi
 
@@ -172,9 +174,16 @@ function gk_new_project() {
 
 
             # Create begin and quit scripts
+            
+            # Use template script
+            template="${2:-default}.sh"
+
+            # Create start and stop scripts
             printf "#!/usr/bin/env bash\n\n# This script will run when STARTING the project \"%s\"\n# Here you might want to cd into your project directory, activate virtualenvs, etc.\n\n# The currently active project is available via \$GK_ACTIVE_PROJECT\n\n" > "$projDir/gk_start.sh"
             printf "#!/usr/bin/env bash\n\n# This script will run when STOPPING the project \"%s\"\n# Here you might want to deactivate virtualenvs, clean up temporary files, etc.\n\n# The currently active project is available via \$GK_ACTIVE_PROJECT\n\n" > "$projDir/gk_stop.sh"
 
+            # Execute template script
+            $GK_HOME/templates/$template $1 $projDir
 
             # Add project to local projects
             touch $homeProj
