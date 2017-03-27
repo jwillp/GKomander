@@ -4,41 +4,56 @@
 # alias gk=". GKomander.sh"
 
 # CONSTANTS
-VERSION=0.3.0
-COPYRIGHT="(c)2016 Goat Games"
+GK_VERSION=0.3.0
+GK_COPYRIGHT="(c)2017 Goat Games"
 # Set home
 GK_HOME="${GK_HOME:-$HOME/.gk}"
-GK_PROJ_DIR="$GK_HOME"
+GK_PROJ_DIR="$GK_HOME" # dir where the list of projects are stored
 
 # Make sure GK_HOME directory exists
-if [[ ! -d $GK_HOME ]]; then 
+if [[ ! -d $GK_HOME ]]; then
     mkdir $GK_HOME 
 fi
 if [[ ! -d $GK_PROJ_DIR ]]; then
     mkdir $GK_PROJ_DIR 
 fi
 
+function return_error() {
+    # Print error message and return error code
+    if [ "$2" ]; then
+        echo "$2"
+    fi
+    if [ "$1" ]; then
+        return "$1"
+    else
+        return 1
+    fi
+}
+
+# Test if gk is sourced. It must not be ran in a subshell 
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+    SOURCE="GKomander MUST be sourced - not run in a subshell.\ni.e. '. ./gk'\n"
+    return_error 1 "$(printf "$SOURCE")"
+    exit
+fi
+
 
 # Displays help for Goat Komander
 function gk_help() {
     echo ""
-    echo "${LIGHT_GREEN}Goat Komander${WHITE} v"$VERSION
+    echo "${LIGHT_GREEN}Goat Komander${WHITE} v"$GK_VERSION
     echo ""
     gk_usage
     echo ""
     echo "Options:"
-    echo "  active                                   Display name of the current project"
-    echo "  switch_project,switch, <project name>    Sets the current project to <project name>"
-    echo "  -l,list                                  List projects"
-    echo "  new-game                                 Creates a new game in the current directory"
-    echo "  new-screen                               Creates a new game screen and a level in the current directory"
-    echo "  new-script                               Creates a new entity script in the current directory"
-    echo "  new-level                                Creates a new level new s in the current directory"
-    echo "  new-config,new-conf                      Creates a new config file in the current directory"
-    echo "  run                                      Runs the current active project"
-    echo "  quit                                     Quits the current Goat Komander session"
-    echo "  -h --help                                Display this information"
-    echo "  -v --version                             Display version info"
+    echo "  active                                        Display name of the current project"
+    echo "  switch_project|switch|load|<project name>     Sets the current project to <project name>"
+    echo "  -l,list                                       List projects"
+    echo "  new-project|new                               Creates a new game in the current directory"
+    echo "  remove|rm                                     Creates a new game in the current directory"
+    echo "  quit                                          Quits the current Goat Komander session"
+    echo "  -h --help                                     Display this information"
+    echo "  -v --version                                  Display version info"
     echo " "
     echo "Please report bugs at https://github.com/GoatGames/GoatKomander"
 }
@@ -52,15 +67,15 @@ function gk_usage() {
 
 # Version information
 function gk_version() {
-    echo "${LIGHT_GREEN}Goat Komander${WHITE}  $VERSION"
-    echo "$COPYRIGHT"
+    echo "${LIGHT_GREEN}Goat Komander${WHITE}  $GK_VERSION"
+    echo "$GK_COPYRIGHT"
 }
 
 
 # Change prompt to display project name
 function gk_prompt_start() {
     export OLD_PS1=$PS1
-    export PS1=${PS1::-2}"\[\e[34m\][$1]\[\e[m\]\\$ "
+    export PS1="${PS1::-3} [$1]$ "
 }
 
 # REset the path to its normal value
@@ -105,18 +120,9 @@ function gk_load() {
     # Get back home alias
     
     alias hcd="cd $projPath"
-    alias cdda="cd $projPath/data"
     alias cddoc="cd $projPath/doc"
-    alias cds="cd $projPath/data/scripts"
-    alias cdsc="cd $projPath/data/screens"
-    alias cdpref="cd $projPath/data/prefabs"
-    alias cdlog="cd $projPath/data/LOG"
-    alias cdlev="cd $projPath/data/levels"
-    alias cdconf="cd $projPath/data/config"
-    alias cdau="cd $projPath/data/audio"
-    alias cdsp="cd $projPath/data/sprites"
+    alias cdsr="cd $projPath/src"
     alias getcd="alias | grep -i cd"
-
 }
 
 # Quits gkomander
@@ -143,8 +149,8 @@ function gk_list() {
     projList=`ls -1p $GK_PROJ_DIR | grep -v /`
     if [[ $projList == "" ]]; then
         echo ""
-        echo "There are no game projects"
-        echo "Create one using: GoatKomander new_game <project_name>"
+        echo "There are no projects"
+        echo "Create one using: GoatKomander new <project_name>"
     else
         # echo "Game Projects:"
         # echo ""
@@ -152,15 +158,17 @@ function gk_list() {
     fi
 }
 
-function gk_new_game() {
+function gk_new_project() {
     if [[ "$1" ]]; then
-        homeProj="$GK_PROJ_DIR\\"$1
+        homeProj="$GK_PROJ_DIR/$1"
+        echo "HOME PROJ $homeProj"
         if [[ ! -e  $homeProj ]]; then
-            echo "Creating new game : $1 ..."
+            echo "Creating new project : $1 ..."
             
             # Create project in current directory
             projDir=`pwd`"/$1"
             mkdir $projDir
+            echo "proj dir fi $projDir"
 
 
             # Create begin and quit scripts
@@ -175,31 +183,14 @@ function gk_new_game() {
             echo $relPath > $homeProj
 
 
-
-            # Create default directory structure
-            mkdir $projDir/data
-            mkdir $projDir/data/LOG
-            mkdir $projDir/data/animations
-            mkdir $projDir/data/audio
-            mkdir $projDir/data/config
-            mkdir $projDir/data/levels
-            mkdir $projDir/data/prefabs
-            mkdir $projDir/data/screens
-            mkdir $projDir/data/scripts
-            mkdir $projDir/data/shaders
-            mkdir $projDir/data/skins
-            mkdir $projDir/data/sprites
-
-            # Copy ge.conf template
-            cp $GK_HOME/templates/ge.conf $projDir/ge.conf
+            # Create default directory structure according to template
+            # TODO
             
             echo "Project \"$1\" created successfully"
             gk_load "$1"
         else
-            echo "Goat Komander: Project already exist choose another name"           
+            echo "Goat Komander: Project already exists, please choose another name"           
         fi
-
-
     else
         echo "Goat Komander: You must specify a project name"
         return 1
@@ -207,29 +198,6 @@ function gk_new_game() {
     
 }
 
-
-
-# GOAT ENGINE SPECIFIG BEGIN
-
-# Creates a game screen and an associated level in current directory
-function gk_new_screen() {
-    cp $GK_HOME/templates/screen.ges "$1.ges"
-    gk_new_level "$1"
-}
-
-function gk_new_script() {
-    cp $GK_HOME/templates/entityScript.lua "$1.lua"
-}
-
-function gk_new_config() {
-    cp $GK_HOME/templates/config.conf "$1.conf"
-}
-
-function gk_new_level() {
-    cp $GK_HOME/templates/level.gel "$1.gel"
-}
-
-# GOAT ENGINE SPECIFIC END
 
 
 
@@ -240,48 +208,25 @@ case "$1" in
         gk_active_project
         ;;
 
-    switch_project)
-        gk_switch_project
+    switch_project|switch|load)
+        gk_switch_project ${@:2}
         ;;
 
     list|-l)
         gk_list
         ;;
 
-
-
-    new-game)
-        gk_new_game ${@:2}
+    new|new-project)
+        gk_new_project ${@:2}
         ;;
-
-    new-screen)
-        gk_new_screen ${@:2}
-        ;;
-
-    new-script)
-        gk_new_script ${@:2}
-        ;;
-
-    new-level)
-        gk_new_level ${@:2}
-        ;;
-
-
-    new-config|new-conf)
-        gk_new_config ${@:2}
-        ;;
-
 
     rm|remove)
-        if [[ -e "$GK_PROJ_DIR/$2" ]]; then
+        if [[ -e $GK_PROJ_DIR/$2 ]]; then # dir where the list of projects are storeden
             gk_remove ${@:2}
         else 
             echo "Goat Komander: Deletion of project failed. The project $2 does not exist"
             return 1
         fi
-        ;;
-
-    run)
         ;;
 
     quit)
@@ -301,7 +246,7 @@ case "$1" in
             gk_help
         else
             # Find project 
-            if [[ -e "$GK_PROJ_DIR/$1" ]]; then
+            if [[ -e $GK_PROJ_DIR/$1 ]]; then
                 gk_load $1
             else
                 # If no project found
