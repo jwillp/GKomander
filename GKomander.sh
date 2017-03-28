@@ -3,12 +3,42 @@
 # It is highly recommended to create a "GK" alias. 
 # alias gk=". GKomander.sh"
 
+
 # CONSTANTS
 GK_VERSION=0.3.0
 GK_COPYRIGHT="(c)2017 Goat Games"
 # Set home
 GK_HOME="${GK_HOME:-$HOME/.gk}"
 GK_PROJ_DIR="$GK_HOME" # dir where the list of projects are stored
+
+
+
+# Colors
+export BLACK='\033[0;30m'
+export DARK_GRAY='\033[1;30m'
+export RED='\033[0;31m'
+export LIGHT_RED='\033[1;31m'
+export GREEN='\033[0;32m'
+export LIGHT_GREEN='\033[1;32m'
+export ORANGE='\033[0;33m'
+export YELLOW='\033[1;33m'
+export BLUE='\033[0;34m'
+export LIGHT_BLUE='\033[1;34m'
+export PURPLE='\033[0;35m'
+export LIGHT_PURPLE='\033[1;35m'
+export CYAN='\033[0;36m'
+export LIGHT_CYAN='\033[1;36m'
+export LIGHT_GRAY='\033[0;37m'
+export WHITE='\033[1;37m'
+export NC='\033[0m' # No Color
+export RED='\033[0;31m'
+
+## So echo uses colors and backslashes escape
+alias echo="echo -e"
+
+
+
+
 
 # Make sure GK_HOME directory exists
 if [[ ! -d $GK_HOME ]]; then
@@ -43,7 +73,7 @@ fi
 # Displays help for Goat Komander
 function gk_help() {
     echo ""
-    echo "${LIGHT_GREEN}Goat Komander${WHITE} v"$GK_VERSION
+    echo "${LIGHT_GREEN}Goat Komander${NC} v"$GK_VERSION
     echo ""
     gk_usage
     echo ""
@@ -69,7 +99,7 @@ function gk_usage() {
 
 # Version information
 function gk_version() {
-    echo "${LIGHT_GREEN}Goat Komander${WHITE}  $GK_VERSION"
+    echo "${LIGHT_GREEN}Goat Komander${NC}  $GK_VERSION"
     echo "$GK_COPYRIGHT"
 }
 
@@ -195,7 +225,7 @@ function gk_new_project() {
             # Create default directory structure according to template
             # TODO
             
-            echo "Project \"$1\" created successfully"
+            echo "${LIGHT_GREEN}Project \"$1\" created successfully${NC}"
             gk_load "$1"
         else
             echo "Goat Komander: Project already exists, please choose another name"           
