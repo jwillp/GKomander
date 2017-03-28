@@ -9,7 +9,7 @@ GK_VERSION=0.3.0
 GK_COPYRIGHT="(c)2017 Goat Games"
 # Set home
 GK_HOME="${GK_HOME:-$HOME/.gk}"
-GK_PROJ_DIR="$GK_HOME" # dir where the list of projects are stored
+GK_PROJ_DIR="$GK_HOME/projects" # dir where the list of projects are stored
 
 
 
