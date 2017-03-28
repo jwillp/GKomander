@@ -15,6 +15,10 @@ touch README.md
 touch LICENSE.md
 
 # Git
-git init
-git add -A
-git commit -m "Initial commit"
+if [ -d .git ]; then
+  echo ${YELLOW}Git r<epo already in directory, will not initialise a new one${NC};
+else
+  git init
+  git add -A
+  git commit -m "Initial commit"
+fi;
