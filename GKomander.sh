@@ -64,7 +64,7 @@ function gk_return_error() {
 
 # Test if gk is sourced. It must not be ran in a subshell 
 if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
-    SOURCE="GKomander MUST be sourced - not run in a subshell.\ni.e. '. ./gk'\n"
+    SOURCE="${YELLOW}GKomander MUST be sourced - not run in a subshell.\ni.e. '. ./gk'\n${NC}"
     gk_return_error 1 "$(printf "$SOURCE")"
     exit
 fi
@@ -83,6 +83,7 @@ function gk_help() {
     echo "  -l,list                                       List projects"
     echo "  new-project|new                               Creates a new game in the current directory"
     echo "  remove|rm                                     Creates a new game in the current directory"
+    echo "  update                                        Updates gk to latest version"
     echo "  quit                                          Quits the current Goat Komander session"
     echo "  -h --help                                     Display this information"
     echo "  -v --version                                  Display version info"
@@ -126,10 +127,10 @@ function gk_remove() {
     if [[ $GK_ACTIVE_PROJECT ]]; then
         gk_quit
     fi
-    echo "Deleting $1"
+    echo "Deleting $1 ..."
     rm -rf gk_get_proj_path $1
-    rm $GK_HOME/$1
-    echo "Project $1 deleted"
+    rm $GK_PROJ_DIR/$1
+    echo "${LIGHT_GREEN}Project $1 deleted${NC}"
 }
 
 # Loads a project (should exist)
@@ -237,7 +238,13 @@ function gk_new_project() {
     
 }
 
-
+function gk_update() {
+    old_pwd=`pwd`
+    cd $GK_HOME
+    git pull
+    cd $old_pwd
+    echo "${LIGHT_GREEN}GKomander update done${NC}"
+}
 
 
 # Main procedure
@@ -267,7 +274,9 @@ case "$1" in
             return 1
         fi
         ;;
-
+    update)
+        gk_update
+        ;;
     quit)
         gk_quit
         ;;
