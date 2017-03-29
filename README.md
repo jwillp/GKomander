@@ -45,3 +45,12 @@ For help on how to use:
 ```bash
 gk --help
 ```
+
+# Update
+Execute the following command
+
+```bash
+$ gk update
+```
+
+or simply ```git pull``` in the ```~/.gk``` directory
