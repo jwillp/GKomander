@@ -9,23 +9,48 @@ Features:
     - define alias and functions to manage projects
 
 # Installation
-1. Put the GKomander.sh in some location.
-2. In your bashrc, create an alias like so:
+Execute the following command in a shell
 
 ```bash
-alias gk="source /path/to/GKomander.sh"
+$ cd ~ && git clone https://gitlab.com/GoatGames/GKomander/ && mv GKomander .gk && echo 'alias gk="source ~/.gk/GKomander.sh" \n' >> ~/.bashrc
 ```
+
+## Manual Installation
+1. Clone this repository in your home directory
+
+```bash
+$ cd ~
+$ git clone https://gitlab.com/GoatGames/GKomander/
+```
+
+2. Rename the folder created by the git command to ```.gk```
+
+```bash
+$ mv GKomander .gk
+```
+
+3. In your bashrc, create an alias like so:
+
+```bash
+alias gk="source ~/.gk/GKomander.sh"
+```
+
 Note: It is important for the script to be sourced or else many of its feature won't
 work properly.
 
-3. run:
-```bash
-$ gk install
-```
 
-# How to use
+# Usage
 For help on how to use:
 
 ```bash
-source GoatKommnder.sh -h
+gk --help
 ```
+
+# Update
+Execute the following command
+
+```bash
+$ gk update
+```
+
+or simply ```git pull``` in the ```~/.gk``` directory
