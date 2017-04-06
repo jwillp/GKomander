@@ -6,5 +6,3 @@
 # The currently active project is available via $GK_ACTIVE_PROJECT
 
 git status
-
-st .

@@ -201,8 +201,6 @@ function gk_new_project() {
             # Create project in current directory
             projDir=`pwd`"/$1"
             mkdir $projDir
-            echo "proj dir fi $projDir"
-
 
             # Create begin and quit scripts
             
@@ -210,8 +208,12 @@ function gk_new_project() {
             template="${2:-default}.sh"
 
             # Create start and stop scripts
-            printf "#!/usr/bin/env bash\n\n# This script will run when STARTING the project \"%s\"\n# Here you might want to cd into your project directory, activate virtualenvs, etc.\n\n# The currently active project is available via \$GK_ACTIVE_PROJECT\n\n" > "$projDir/gk_start.sh"
-            printf "#!/usr/bin/env bash\n\n# This script will run when STOPPING the project \"%s\"\n# Here you might want to deactivate virtualenvs, clean up temporary files, etc.\n\n# The currently active project is available via \$GK_ACTIVE_PROJECT\n\n" > "$projDir/gk_stop.sh"
+            if [[ ! -d "$projDir/gk_start.sh" ]]; then
+                printf "#!/usr/bin/env bash\n\n# This script will run when STARTING the project \"%s\"\n# Here you might want to cd into your project directory, activate virtualenvs, etc.\n\n# The currently active project is available via \$GK_ACTIVE_PROJECT\n\n" > "$projDir/gk_start.sh"
+            fi
+            if [[ ! -d "$projDir/gk_stop.sh" ]]; then
+                printf "#!/usr/bin/env bash\n\n# This script will run when STOPPING the project \"%s\"\n# Here you might want to deactivate virtualenvs, clean up temporary files, etc.\n\n# The currently active project is available via \$GK_ACTIVE_PROJECT\n\n" > "$projDir/gk_stop.sh"
+            fi
 
             # Execute template script
             $GK_HOME/templates/$template $1 $projDir
