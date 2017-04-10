@@ -24,17 +24,24 @@ bin/gpm selfupgrade
 bin/gpm update
 
 # Useful commands
+# TODO check if linux for this
 echo  xamp_start \n >> gk_start.sh
 echo  xamp_stop \n >> gk_stop.sh 
 
-echo 'alias hcd="cd $projectPath"' >> gk_start.sh
-echo 'alias cddoc="cd $projPath/doc"' >> gk_start.sh
-echo 'alias cdu="cd $projPath/user"' >> gk_start.sh
+echo 'alias hcd="cd $projectPath \n"' >> gk_start.sh
+echo 'alias cddoc="cd $projPath/doc \n"' >> gk_start.sh
+echo 'alias cdu="cd $projPath/user \n"' >> gk_start.sh
+
+echo 'alias grav_update_core="hcd && bin/gpm selfupgrade \n"' >> gk_start.sh
+echo 'alias grav_update_plugins="hcd && bin/gpm update \n"' >> gk_start.sh
+echo 'alias grav_update_all="grav_update_core && grav_update_plugins \n"' >> gk_start.sh
+
+
 
 # Git
 touch .gitignore
-echo  "cache/" >> .gitignore
-echo  "logs/" >> .gitignore
+echo  "cache/ \n" >> .gitignore
+echo  "logs/ \n" >> .gitignore
 
 git init
 git add -A

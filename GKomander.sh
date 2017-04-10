@@ -82,6 +82,7 @@ function gk_help() {
     echo "  switch_project|switch|load|<project name>     Sets the current project to <project name>"
     echo "  -l,list                                       List projects"
     echo "  new-project|new                               Creates a new game in the current directory"
+    echo "  import|import-project|-i                      Imports an already existing project (cwd)"
     echo "  remove|rm                                     Creates a new game in the current directory"
     echo "  update                                        Updates gk to latest version"
     echo "  quit                                          Quits the current Goat Komander session"
@@ -240,6 +241,28 @@ function gk_new_project() {
     
 }
 
+# Imports an already existing project
+# imports the current directory as project with name $1
+function gk_import_project() {
+    if [[ "$1" ]]; then
+        homeProj="$GK_PROJ_DIR/$1"
+        if [[ ! -e  $homeProj ]]; then
+            # Add project to local projects
+            touch $homeProj
+
+            relPath=`realpath --relative-to=$HOME .`
+            echo $relPath > $homeProj
+
+            echo "${LIGHT_GREEN}Project \"$1\" created successfully${NC}"
+        else
+            echo "Goat Komander: Project already exists, please choose another name"           
+        fi
+    else
+        echo "Goat Komander: You must specify a project name"
+        return 1
+    fi
+}
+
 function gk_update() {
     old_pwd=`pwd`
     cd $GK_HOME
@@ -266,6 +289,10 @@ case "$1" in
 
     new|new-project)
         gk_new_project ${@:2}
+        ;;
+
+    import|import-project| -i)
+        gk_import_project ${@:2}
         ;;
 
     rm|remove)

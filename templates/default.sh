@@ -16,7 +16,7 @@ touch LICENSE.md
 
 # Git
 if [ -d .git ]; then
-  echo ${YELLOW}Git r<epo already in directory, will not initialise a new one${NC};
+  echo "${YELLOW}Git repo already in directory, will not initialise a new one${NC}";
 else
   git init
   git add -A
