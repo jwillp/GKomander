@@ -6,7 +6,7 @@
 
 # CONSTANTS
 GK_VERSION=0.3.0
-GK_COPYRIGHT="(c)2017 Goat Games"
+GK_COPYRIGHT="(c)2017 jwillp"
 # Set home
 GK_HOME="${GK_HOME:-$HOME/.gk}"
 GK_PROJ_DIR="$GK_HOME/projects" # dir where the list of projects are stored
@@ -81,15 +81,15 @@ function gk_help() {
     echo "  active                                        Display name of the current project"
     echo "  switch_project|switch|load|<project name>     Sets the current project to <project name>"
     echo "  -l,list                                       List projects"
-    echo "  new-project|new                               Creates a new game in the current directory"
+    echo "  new-project|new                               Creates a new project in the current directory"
     echo "  import|import-project|-i                      Imports an already existing project (cwd)"
-    echo "  remove|rm                                     Creates a new game in the current directory"
+    echo "  remove|rm                                     Deletes a project and the current directory"
     echo "  update                                        Updates gk to latest version"
     echo "  quit                                          Quits the current Goat Komander session"
     echo "  -h --help                                     Display this information"
     echo "  -v --version                                  Display version info"
     echo " "
-    echo "Please report bugs at https://github.com/GoatGames/GoatKomander"
+    echo "Please report bugs and issues at https://github.com/jwillp/GKomander"
 }
 
 # usage
@@ -186,7 +186,7 @@ function gk_list() {
         echo "There are no projects"
         echo "Create one using: GoatKomander new <project_name>"
     else
-        # echo "Game Projects:"
+        # echo "Projects:"
         # echo ""
         ls -1p $GK_PROJ_DIR | grep -v /
     fi
