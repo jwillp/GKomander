@@ -16,6 +16,16 @@ Execute the following command in a bash shell
 ```bash
 $ curl -s https://raw.githubusercontent.com/jwillp/GKomander/master/install.sh | bash
 ```
+ Refresh our environment variables:
+```bash
+$ source ~/.bashrc
+```
+
+To check that your installation is working, run the command:
+
+```bash
+$ gk
+```
 
 ## Manual Installation
 1. Clone this repository in your home directory
