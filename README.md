@@ -5,16 +5,16 @@ Goat Komander, GKomander or simply GK is a simple project management tool
 written in bash.
 
 Features:
-- create project following user defined templates
-- switch between managed project
-- launch project related scripts
-- define alias and functions to manage projects
+- Create project following user defined templates
+- Switch between managed projects
+- Launch project related scripts
+- Define alias and functions to manage projects
 
 # Installation
 Execute the following command in a bash shell
 
 ```bash
-$ cd ~ && git clone https://github.com/GoatGames/GKomander/ && mv GKomander .gk && echo 'alias gk="source ~/.gk/GKomander.sh" \n' >> ~/.bashrc
+$ cd ~ && git clone https://github.com/jwillp/GKomander/ && mv GKomander .gk && echo 'alias gk="source ~/.gk/GKomander.sh" \n' >> ~/.bashrc
 ```
 
 ## Manual Installation
@@ -22,7 +22,7 @@ $ cd ~ && git clone https://github.com/GoatGames/GKomander/ && mv GKomander .gk 
 
 ```bash
 $ cd ~
-$ git clone https://github.com/GoatGames/GKomander/
+$ git clone https://github.com/jwillp/GKomander/
 ```
 
 2. Rename the folder created by the git command to ```.gk```
