@@ -14,7 +14,7 @@ Features:
 Execute the following command in a bash shell
 
 ```bash
-$ curl -s https://raw.githubusercontent.com/jwillp/GKomander/master/install.md | bash
+$ curl -s https://raw.githubusercontent.com/jwillp/GKomander/master/install.sh | bash
 ```
 
 ## Manual Installation
