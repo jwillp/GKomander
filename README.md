@@ -14,7 +14,7 @@ Features:
 Execute the following command in a bash shell
 
 ```bash
-$ cd ~ && git clone https://github.com/GoatGames/GKomander/ && mv GKomander .gk && echo 'alias gk="source ~/.gk/GKomander.sh" \n' >> ~/.bashrc
+$ curl -s https://raw.githubusercontent.com/jwillp/GKomander/master/install.md | bash
 ```
 
 ## Manual Installation
