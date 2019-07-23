@@ -5,8 +5,8 @@
 
 
 # CONSTANTS
-GK_VERSION=0.3.0
-GK_COPYRIGHT="(c)2017 jwillp"
+GK_VERSION=0.4.0
+GK_COPYRIGHT="(c)2019 jwillp"
 # Set home
 GK_HOME="${GK_HOME:-$HOME/.gk}"
 GK_PROJ_DIR="$GK_HOME/projects" # dir where the list of projects are stored
@@ -37,7 +37,10 @@ export RED='\033[0;31m'
 alias echo="echo -e"
 
 
-
+# Load autocompletion
+if [[ -e $GK_HOME/GKomander-completion.sh ]]; then
+    source $GK_HOME/GKomander-completion.sh
+fi
 
 
 # Make sure GK_HOME directory exists
@@ -176,6 +179,11 @@ function gk_active_project() {
 # Change the active project for something else
 function gk_switch_project() {
     gk_load $1
+}
+
+# List available projects
+function gk_list_no_verbose() {
+    ls -1p $GK_PROJ_DIR | grep -v /
 }
 
 # List available projects
