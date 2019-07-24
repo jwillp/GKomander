@@ -182,11 +182,6 @@ function gk_switch_project() {
 }
 
 # List available projects
-function gk_list_no_verbose() {
-    ls -1p $GK_PROJ_DIR | grep -v /
-}
-
-# List available projects
 function gk_list() {
     projList=`ls -1p $GK_PROJ_DIR | grep -v /`
     if [[ $projList == "" ]]; then
